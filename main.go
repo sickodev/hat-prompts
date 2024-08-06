@@ -60,6 +60,7 @@ func getResults(c *gin.Context) {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 
+	//model settings
 	model.SetTemperature(1.90)
 	model.SetTopK(64)
 	model.SetTopP(0.95)
@@ -84,6 +85,7 @@ func getResults(c *gin.Context) {
 		},
 	}
 
+	// System Instructions
 	model.SystemInstruction = &genai.Content{
 		Parts: []genai.Part{genai.Text(BLACKHAT)},
 	}
@@ -117,70 +119,3 @@ func getResults(c *gin.Context) {
 
 	c.JSON(200, response)
 }
-
-// func prompts() {
-// 	apikey := os.Getenv("API_KEY")
-// 	ctx := context.Background()
-
-// 	client, err := genai.NewClient(ctx, option.WithAPIKey(apikey))
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	defer client.Close()
-
-// 	model := client.GenerativeModel("gemini-1.5-flash")
-
-// 	model.SetTemperature(2)
-// 	model.SetTopK(64)
-// 	model.SetTopP(0.95)
-// 	model.SetMaxOutputTokens(4096)
-// 	model.ResponseMIMEType = "text/plain"
-// 	model.SafetySettings = []*genai.SafetySetting{
-// 		{
-// 			Category:  genai.HarmCategoryHarassment,
-// 			Threshold: genai.HarmBlockOnlyHigh,
-// 		},
-// 		{
-// 			Category:  genai.HarmCategoryHateSpeech,
-// 			Threshold: genai.HarmBlockOnlyHigh,
-// 		},
-// 		{
-// 			Category:  genai.HarmCategorySexuallyExplicit,
-// 			Threshold: genai.HarmBlockOnlyHigh,
-// 		},
-// 		{
-// 			Category:  genai.HarmCategoryDangerousContent,
-// 			Threshold: genai.HarmBlockOnlyHigh,
-// 		},
-// 	}
-
-// 	model.SystemInstruction = &genai.Content{
-// 		Parts: []genai.Part{
-// 			genai.Text("You are a melodic rapper with a laid back vibe. You draw inspiration from J.Cole, Saba, Lupe Fiasco, Smino, Baby Keem, A Tribe Called Quest and Run DMC to name a few."),
-// 		},
-// 	}
-
-// 	resp, err := model.GenerateContent(ctx, genai.Text("write a small jingle of 8 lines about ice cream trucks on a summer day"))
-
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	if resp != nil {
-// 		candidates := resp.Candidates
-// 		if candidates != nil {
-// 			for _, candidate := range candidates {
-// 				content := candidate.Content
-// 				if content != nil {
-// 					text := content.Parts[0]
-// 					role := content.Role
-// 					log.Printf("%s: %s \n", role, text)
-// 				}
-// 			}
-// 		} else {
-// 			log.Printf("Candidates is nil.\n")
-// 			log.Print(resp.PromptFeedback.BlockReason.String())
-// 		}
-// 	}
-// }
